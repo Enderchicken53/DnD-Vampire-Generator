@@ -13,6 +13,7 @@ body {
 }
 </style>
 
+
 <style>
 .bottom-right {
     position: fixed;
@@ -44,11 +45,30 @@ body {
 }
 </style>
 
+<style>
+.scroll-box {
+  width: 100%;       /* Define explicit boundaries */
+  height: 1000px;     /* A fixed height is mandatory to trigger the boundary */
+  overflow-y: auto;  /* Adds a vertical scrollbar ONLY when content overflows */
+}
+
+.middle-right {
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    z-index: 1000;
+  }
+  </style>
+
     <meta charset="utf-8">
     <title>Vampire Calculator</title>
 </head>
 
 <body>
+
+<div class="scroll-box">
+  <p>
+
     <h1>Vampire Calculator</h1>
 
     <p><label for="Type">Choose a Type:</label>
@@ -87,10 +107,12 @@ body {
   </select>
 </div>
 
+<div class="middle-right">
 <div id="screenshot">
   <h3>Vampire Stats</h3>
   <div id="output1"></div>
   <div id="output2"></div>
+</div>
 </div>
 
 <div class="bottom-right">
@@ -98,6 +120,9 @@ body {
         <button class="mode-button" id="save-jpeg-button">Save as JPEG</button>
         <input type="text" class="file-name-input" id="file-name-input" placeholder="Enter file name">
     </div>
+
+</div>
+</p>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
@@ -118,7 +143,7 @@ const screenshot = document.getElementById('screenshot');
   const Placeholder = document.createElement("img");
       Placeholder.src = "./images/Placeholder.png";
   const ThrallPlaceholder = document.createElement("img");
-      ThrallPlaceholder.src = "./images/ThrallPlaceholder.jpg";
+      ThrallPlaceholder.src = "./images/ThrallPlaceholder.png";
 
       saveJpegButton.addEventListener('click', () => {
         html2canvas(screenshot, {
