@@ -34,7 +34,14 @@ body {
     padding: 5px;
     box-sizing: border-box;
 }
+</style>
 
+<style>
+#screenshot {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+}
 </style>
 
     <meta charset="utf-8">
@@ -81,14 +88,13 @@ body {
 </div>
 
 <div id="screenshot">
-
-<div id="output1"></div>
-
-<div id="output2"></div>
-
+  <h3>Vampire Stats</h3>
+  <div id="output1"></div>
+  <div id="output2"></div>
 </div>
 
 <div class="bottom-right">
+        <p>Img download does not work in testing </p>
         <button class="mode-button" id="save-jpeg-button">Save as JPEG</button>
         <input type="text" class="file-name-input" id="file-name-input" placeholder="Enter file name">
     </div>
@@ -109,13 +115,10 @@ const screenshot = document.getElementById('screenshot');
 
   const VandemereBlock = document.createElement("img");
     VandemereBlock.src = "./images/VandemereStatBlock.png";
-    VandemereBlock.crossOrigin = "anonymous";
   const Placeholder = document.createElement("img");
       Placeholder.src = "./images/Placeholder.png";
-      Placeholder.crossOrigin = "anonymous";
   const ThrallPlaceholder = document.createElement("img");
       ThrallPlaceholder.src = "./images/ThrallPlaceholder.jpg";
-      ThrallPlaceholder.crossOrigin = "anonymous";
 
       saveJpegButton.addEventListener('click', () => {
         html2canvas(screenshot, {
