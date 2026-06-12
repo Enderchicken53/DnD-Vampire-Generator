@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+  #output1 {
+    white-space: pre-line;
+}
+</style>
+<style>
+body {
+    background-color: lightgray;
+}
+</style>
+
+<style>
+.bottom-right {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+  }
+.save-load-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.file-name-input {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+</style>
+
+    <meta charset="utf-8">
+    <title>Vampire Calculator</title>
+</head>
+
+<body>
+    <h1>Vampire Calculator</h1>
+
+    <p><label for="Type">Choose a Type:</label>
+<select name="Type" id="Type">
+  <option value="" disabled selected>Select a type</option>
+  <option value="Pureblood">Pureblood</option>
+  <option value="Half-Blood">Half-Blood</option>
+  <option value="Thrall">Thrall</option>
+</select>
+</p>
+
+<p><label for="Family">Choose a Family:</label>
+
+<select name="Family" id="Family">
+  <option value="" disabled selected>Select a type</option>
+  <option value="Mortem">Mortem</option>
+  <option value="Nyx">Nyx</option>
+  <option value="Vandemere">Vandemere</option>
+  <option value="Esmeray">Esmeray</option>
+</select>
+</p>
+
+<div id="PowerLevel" style="display:none;">
+  <label for="Power Level">Choose a Power Level:</label>
+  <select id="subCategory">
+    <option value="Fledgling">Fledgling</option>
+    <option value="Underling">Underling</option>
+    <option value="Acolyte">Acolyte</option>
+    <option value="Regent">Regent</option>
+    <option value="Duke/Duchess">Duke/Duchess</option>
+    <option value="Prince/Princess">Prince/Princess</option>
+    <option value="King/Queen">King/Queen</option>
+    <option value="Young">Young</option>
+    <option value="Middle">Middle</option>
+    <option value="Old">Old</option>
+  </select>
+</div>
+
+<div id="screenshot">
+
+<div id="output1"></div>
+
+<div id="output2"></div>
+
+</div>
+
+<div class="bottom-right">
+        <button class="mode-button" id="save-jpeg-button">Save as JPEG</button>
+        <input type="text" class="file-name-input" id="file-name-input" placeholder="Enter file name">
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+const typeSelect = document.getElementById("Type");
+const familySelect = document.getElementById("Family");
+const powerSelect = document.getElementById("PowerLevel");
+const subcatSelect = document.getElementById("subCategory");
+const output1 = document.getElementById("output1");
+const output2 = document.getElementById("output2")
+const saveJpegButton = document.getElementById('save-jpeg-button');
+const fileNameInput = document.getElementById('file-name-input');
+const screenshot = document.getElementById('screenshot');
+
+
+
+  const VandemereBlock = document.createElement("img");
+    VandemereBlock.src = "./images/VandemereStatBlock.png";
+    VandemereBlock.crossOrigin = "anonymous";
+  const Placeholder = document.createElement("img");
+      Placeholder.src = "./images/Placeholder.png";
+      Placeholder.crossOrigin = "anonymous";
+  const ThrallPlaceholder = document.createElement("img");
+      ThrallPlaceholder.src = "./images/ThrallPlaceholder.jpg";
+      ThrallPlaceholder.crossOrigin = "anonymous";
+
+      saveJpegButton.addEventListener('click', () => {
+        html2canvas(screenshot, {
+    useCORS: true,
+    allowTaint: false
+        }).then(canvas => {
+
+          canvas.toBlob(blob => {
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.href = url;
+            link.download = 'image.jpeg';
+            link.click();
+
+            URL.revokeObjectURL(url);
+          }, 'image/jpeg');
+
+        });
+      });
+
+
+typeSelect.addEventListener("change", function() {const selectedType
+= typeSelect.value;
+
+let powerLevels = [];
+if (selectedType === "Pureblood") {
+    powerLevels = ["Prince/Princess", "King/Queen"];
+}
+
+else if (selectedType === "Half-Blood") {
+    powerLevels = [
+        "Fledgling",
+        "Underling",
+        "Acolyte",
+        "Regent",
+        "Duke/Duchess"
+    ];
+}
+else if (selectedType === "Thrall") {
+    powerLevels = [
+      "Young",
+      "Middle",
+      "Old"
+    ];
+};
+
+subcatSelect.innerHTML = "";
+
+for (let power of powerLevels) {
+    const option = document.createElement("option");
+
+    option.value = power;
+    option.textContent = power;
+
+    subcatSelect.appendChild(option);
+}
+
+
+document.getElementById("PowerLevel").style.display = "block";
+});
+
+function updateStats() {
+    const Type = typeSelect.value
+    const Family= familySelect.value
+    const Power = subcatSelect.value
+
+let HealthPoints = 0
+let ArmorClass = 0
+let StatSet = "Test"
+let ChallengeRating = 0
+let SaveDC = 0
+let VampMod = "Test2"
+
+    if (Type === "Pureblood") {
+      HealthPoints = 100, ArmorClass = 18;
+    }
+    else if (Type === "Half-Blood") {
+      HealthPoints = 25, ArmorClass = 13;
+    }
+      else if (Type === "Thrall") {
+        HealthPoints = 10, ArmorClass =11
+      }
+
+
+      if (Power === "Fledgling") {
+        HealthPoints *= 0.8, SaveDC = 13, VampMod = "+2", ChallengeRating = "1/2",
+        StatSet = "STR: 10 (+0) DEX: 14 (+2) CON: 12 (+1) INT: 10 (+0) WIS: 11 (+0) CHA: 13 (+1)";
+      }
+      else if (Power === "Underling") {
+        HealthPoints *= 1.2, SaveDC = 13, VampMod = "1d6 + 1", ChallengeRating = "1",
+        StatSet = "STR: 12 (+1) DEX: 15 (+2) CON: 13 (+1) INT: 10 (+0) WIS: 12 (+1) CHA: 14 (+2)";
+      }
+        else if (Power === "Acolyte") {
+          HealthPoints *= 1.6, SaveDC = 13, VampMod = "1d8 + 3", ChallengeRating = "2",
+          StatSet = "STR: 14 (+2) DEX: 16 (+3) CON: 14 (+2) INT: 11 (+0) WIS: 12 (+1) CHA: 15 (+2)";
+      }
+      else if (Power === "Regent") {
+        HealthPoints *= 2, SaveDC = 13, VampMod = "1d12 + 4", ChallengeRating = "3",
+        StatSet = "STR: 16 (+3) DEX: 16 (+3) CON: 15 (+2) INT: 12 (+1) WIS: 13 (+1) CHA: 16 (+3)";
+      }
+      else if (Power === "Duke/Duchess") {
+        HealthPoints *= 2.4, SaveDC = 14, VampMod = "2d12", ChallengeRating = "4",
+        StatSet = "STR: 17 (+3) DEX: 17 (+3) CON: 16 (+3) INT: 12 (+1) WIS: 14 (+2) CHA: 17 (+3)";
+      }
+      else if (Power === "Prince/Princess") {
+        HealthPoints *= 2.8, SaveDC = 15, VampMod = "2d12 + 3", ChallengeRating = "5",
+        StatSet = "STR: 18 (+4) DEX: 18 (+4) CON: 16 (+3) INT: 13 (+1) WIS: 14 (+2) CHA: 18 (+4)";
+      }
+        else if (Power === "King/Queen") {
+          HealthPoints *= 3.2, SaveDC = 15, VampMod = "1d20 + 1d12 +3", ChallengeRating = "6",
+          StatSet = "STR: 20 (+5) DEX: 20 (+5) CON: 18 (+4) INT: 14 (+2) WIS: 16 (+3) CHA: 18 (+4)";
+      }
+      else if (Power === "Young") {
+        HealthPoints *= 1.5, SaveDC = null, VampMod = "+0", ChallengeRating = null,
+        StatSet = "STR: 12 (+1) DEX: 14 (+2) CON: 12 (+1) INT: 10 (+0) WIS: 11 (+0) CHA: 13 (+1)";
+      }
+      else if (Power === "Middle") {
+        HealthPoints *= 1, SaveDC = null, VampMod = "+0", ChallengeRating = null,
+        StatSet = "STR: 10 (+0)  DEX: 13 (+1)  CON: 11 (+0)  INT: 9 (-1)  WIS: 10 (+0)  CHA: 12 (+1)";
+      }
+      else if (Power === "Old") {
+        HealthPoints *= 0.5, SaveDC = null, VampMod = "+0", ChallengeRating = null,
+        StatSet = "STR: 8 (-1)  DEX: 12 (+1)  CON: 10 (+0)  INT: 9 (-1)  WIS: 10 (+0)  CHA: 11 (+0)"
+      }
+
+      output1.innerHTML =
+          "<span style='color:green'>HP: " + HealthPoints + "</span>" +
+          " | <span style='color:blue'>AC: " + ArmorClass + "</span>" +
+          " | <span style='color:maroon'>Crimson Modifier (CM): " + VampMod + "</span>" +
+          " | <span style='color:darkgoldenrod'>Save DC: " + SaveDC + "</span>" +
+          " | <span style='color:purple'>CR: " + ChallengeRating + "</span>" +
+          "<br><span style='color:black; text-decoration: underline;'>Stats: " + StatSet + "</span>";
+}
+
+
+function updateImg() {
+      const Family = familySelect.value;
+      const Type = typeSelect.value
+
+output2.innerHTML = "";
+
+if (Family === "Vandemere" && ["Half-Blood", "Pureblood"].includes(Type)) {
+  output2.appendChild(VandemereBlock);
+}
+else if (Family === "Nyx" && ["Half-Blood", "Pureblood"].includes(Type)) {
+  output2.appendChild(Placeholder);
+}
+  else if (Family === "Esmeray" && ["Half-Blood", "Pureblood"].includes(Type)) {
+  output2.appendChild(Placeholder);
+}
+  else if (Family === "Mortem" && ["Half-Blood", "Pureblood"].includes(Type)) {
+    output2.appendChild(Placeholder)
+}
+  else if (Family === "Vandemere" && ["Thrall"].includes(Type)) {
+    output2.appendChild(ThrallPlaceholder)
+}
+else if (Family === "Nyx" && ["Thrall"].includes(Type)) {
+  output2.appendChild(ThrallPlaceholder)
+}
+else if (Family === "Esmeray" && ["Thrall"].includes(Type)) {
+  output2.appendChild(ThrallPlaceholder)
+}
+else if (Family === "Mortem" && ["Thrall"].includes(Type)) {
+  output2.appendChild(ThrallPlaceholder)
+}
+}
+
+
+function calculate() {
+    updateStats();
+    updateImg();
+}
+
+typeSelect.addEventListener("change", calculate);
+subcatSelect.addEventListener("change", calculate);
+familySelect.addEventListener("change", calculate)
+
+
+</script>
+</body>
+</html>
